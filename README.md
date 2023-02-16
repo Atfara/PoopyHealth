@@ -52,7 +52,82 @@ Composants :
 ## Conception Arduino 
 
 
+<img width="962" alt="image" src="https://user-images.githubusercontent.com/89772039/219408656-27a89e26-fe45-4e99-9947-16188652a5f4.png">
+
+
 ## Code : 
+
+// C++ code
+#include <Adafruit_NeoPixel.h>
+
+#define battery A3
+#define button A0
+#define capteurEmpreinte A1
+#define capteurSelles A2
+#define redLight  2
+#define blueLight  7
+
+
+void setup()
+{
+  //Initilaisation des composants
+  pinMode(battery, INPUT);
+  pinMode(button,INPUT_PULLUP); 
+  pinMode(capteurEmpreinte, INPUT);
+  pinMode(capteurSelles, INPUT);
+  pinMode(redLight, OUTPUT);
+  pinMode(blueLight, OUTPUT);
+  
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  int batteryValue = analogRead(battery);
+  int btnValue = analogRead(button); 
+  int capteurEmpreinteValue = analogRead(capteurEmpreinte);
+  int capteurSellesValue = analogRead(capteurSelles);
+
+  //Batterie suffisante
+  if(batteryValue >= 50){
+    
+    //Analyse de l'empreinte
+  	if(capteurEmpreinteValue > 1013){
+    	digitalWrite(redLight,LOW);
+    	digitalWrite(blueLight,HIGH);
+      
+      //Pression du bouton
+      if(btnValue < 200){
+    	if(capteurSellesValue >=0 && capteurSellesValue <= 70){
+          	Serial.println("Taux d'emoglobine : " << capteurSellesValue);
+      		Serial.println("Vous êtes en bonne santé");
+    	}
+    	else if(capteurSellesValue >=71 && capteurSellesValue <= 150){
+          	Serial.println("Taux d'emoglobine : " << capteurSellesValue);
+      		Serial.println("D'après l'analyse de votre caca, vous manquez de fer et de vitamine C, surveillez-votre alimentation.");
+    	}
+    	else if(capteurSellesValue >=151 && capteurSellesValue <= 250){
+      		Serial.println("Votre Etat de santé est inquiétant, vous devriez consulté votre médecin");
+    	}
+    	else if(capteurSellesValue >=251){
+          	Serial.println("Taux d'emoglobine : " + capteurSellesValue);
+      		Serial.println("Vous avez une gastro ou avez trop bu la veille (Attention l'alcool est dangereux pour la santé, à consommé avec modération");
+    	}
+      }
+      else{
+        Serial.println("Appuyez sur le bouton pour analyser vos selles");
+      }
+  	}
+  	else{
+    	digitalWrite(redLight,HIGH);
+    	digitalWrite(blueLight,LOW);
+  	}
+  }
+  else{
+    Serial.println("Batterie insuffisante pour démarer le service. Recharger svp.");
+  }
+  delay(3000);//Actualisation de la mesure toutes les secondes 
+}
 
 
 
