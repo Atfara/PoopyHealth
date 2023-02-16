@@ -59,14 +59,12 @@ Composants :
 
 // C++ code
 #include <Adafruit_NeoPixel.h>
-
 #define battery A3
 #define button A0
 #define capteurEmpreinte A1
 #define capteurSelles A2
 #define redLight  2
 #define blueLight  7
-
 
 void setup()
 {
@@ -77,20 +75,16 @@ void setup()
   pinMode(capteurSelles, INPUT);
   pinMode(redLight, OUTPUT);
   pinMode(blueLight, OUTPUT);
-  
   Serial.begin(9600);
 }
-
 void loop()
 {
   int batteryValue = analogRead(battery);
   int btnValue = analogRead(button); 
   int capteurEmpreinteValue = analogRead(capteurEmpreinte);
-  int capteurSellesValue = analogRead(capteurSelles);
-
+  int capteurSellesValue = analogRead(capteurSelles);  
   //Batterie suffisante
-  if(batteryValue >= 50){
-    
+  if(batteryValue >= 50){    
     //Analyse de l'empreinte
   	if(capteurEmpreinteValue > 1013){
     	digitalWrite(redLight,LOW);
@@ -122,7 +116,7 @@ void loop()
     	digitalWrite(redLight,HIGH);
     	digitalWrite(blueLight,LOW);
   	}
-  }
+  } 
   else{
     Serial.println("Batterie insuffisante pour démarer le service. Recharger svp.");
   }
