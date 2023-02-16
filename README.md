@@ -77,14 +77,18 @@ void setup()
   pinMode(blueLight, OUTPUT);
   Serial.begin(9600);
 }
+
 void loop()
 {
   int batteryValue = analogRead(battery);
   int btnValue = analogRead(button); 
   int capteurEmpreinteValue = analogRead(capteurEmpreinte);
-  int capteurSellesValue = analogRead(capteurSelles);  
+  int capteurSellesValue = analogRead(capteurSelles);
+  
+  
   //Batterie suffisante
   if(batteryValue >= 50){    
+  
     //Analyse de l'empreinte
   	if(capteurEmpreinteValue > 1013){
     	digitalWrite(redLight,LOW);
@@ -116,12 +120,13 @@ void loop()
     	digitalWrite(redLight,HIGH);
     	digitalWrite(blueLight,LOW);
   	}
-  } 
-  else{
+    } 
+    else{
+  
     Serial.println("Batterie insuffisante pour démarer le service. Recharger svp.");
-  }
-  delay(3000);//Actualisation de la mesure toutes les secondes 
-}
+    }
+    delay(3000);//Actualisation de la mesure toutes les secondes 
+    }
 
 
 
